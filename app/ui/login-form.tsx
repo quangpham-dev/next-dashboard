@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { useSearchParams } from "next/navigation";
 import {
   AtSymbolIcon,
   ExclamationCircleIcon,
@@ -12,6 +13,8 @@ import { Button } from "./button";
 import { authenticate } from "@/app/lib/actions";
 
 export default function LoginForm() {
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
   const [errorMessage, formAction, isPending] = useActionState(
     authenticate,
     undefined
@@ -64,6 +67,7 @@ export default function LoginForm() {
             </div>
           </div>
         </div>
+        <input type="hidden" name="redirectTo" value={callbackUrl} />
         <Button className="mt-4 w-full" aria-disabled={isPending}>
           Log in <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
         </Button>
